@@ -88,9 +88,17 @@ function formatChatMessage(chats: ChatMessage[]) {
   var result = "";
   chats.forEach((msg, i)=>{
     if (msg.role === "user") {
-      result += `User: ${msg.text}\n\n`;
+      if (msg.text.startsWith("You said")) {
+        result += `User: ${msg.text.replace("You said", "").trim()}\n\n`;
+      }else {
+        result += `User: ${msg.text}\n\n`;
+      }
     }else {
-      result += `Assistant: ${msg.text}\n\n`;
+      if (msg.text.startsWith("Gemini said")) {
+        result += `Assistant: ${msg.text.replace("Gemini said", "").trim()}\n\n`;
+      }else {
+        result += `Assistant: ${msg.text}\n\n`;
+      }
     }
   })
   result += `User: `;
@@ -230,14 +238,20 @@ function injectGeminiButtons() {
   );
 
   actionGroups.forEach((actionGroup) => {
+    // console.log(actionGroup)
     if (actionGroup.querySelector(INJECTED_BUTTON_SELECTOR)) return;
 
     const responseContainer = actionGroup.closest<HTMLElement>(".response-container");
     if (!responseContainer) return;
-
     const button = createGeminiActionButton(responseContainer);
 
-    actionGroup.appendChild(button);
+    [...actionGroup.children].forEach((child)=>{
+      if (child.classList.contains("spacer")) {
+        actionGroup.insertBefore(button, child);
+      }
+    })
+
+    // actionGroup.insertBefore(button, actionGroup.lastChild);
   });
 }
 
