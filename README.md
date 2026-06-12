@@ -1,6 +1,6 @@
 # AI Chats Forker
 
-A browser extension for scraping and saving your AI chat conversations, built with [WXT](https://wxt.dev) and React.
+A browser extension for scraping and saving your AI chat conversations, built with [WXT](https://wxt.dev).
 
 ## Prerequisites
 
